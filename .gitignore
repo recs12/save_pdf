@@ -1,0 +1,13 @@
+*.log
+*.exe
+*.pyc
+.cache/
+.coverage
+.idea/
+.vscode/
+save_pdf.egg-info/
+build/
+dist/
+docs/build/
+venv/
+wheelhouse/
