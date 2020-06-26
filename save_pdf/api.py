@@ -11,8 +11,6 @@ clr.AddReference("System.IO")
 clr.AddReference("Interop.SolidEdge")
 clr.AddReference("System.Runtime.InteropServices")
 
-import SolidEdgeFramework as SEFramework
-import SolidEdgePart as SEPart
 import System.Runtime.InteropServices as SRI
 import System
 from System import Console

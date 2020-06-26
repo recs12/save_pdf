@@ -2,7 +2,17 @@
 """
 
 import sys
-from api import Api, combine, start, username, userprofile, is_exist, makedirs, raw_input
+
+from api import (
+    Api,
+    combine,
+    is_exist,
+    makedirs,
+    raw_input,
+    start,
+    username,
+    userprofile,
+)
 
 
 def save_pdf():
@@ -14,9 +24,24 @@ def save_pdf():
         session.check_valid_version("Solid Edge ST7", "Solid Edge 2019")
         user = username()
         print("\nUser: %s" % user)
-        if user.lower() in ["recs", "nunk", "peld6"]:
+        if user.lower() in [
+            "alba",
+            "bouc11",
+            "lapc3",
+            "peld6",
+            "fouj3",
+            "cotk2",
+            "nunk",
+            "beam",
+            "boum3",
+            "morm8",
+            "benn2",
+            "recs",
+            "gils2",
+            "albp",
+            "tres2",
+        ]:
             print("Autorized user ID")
-            pass
         else:
             print("user with no valid permissions.")
             sys.exit()
@@ -29,9 +54,7 @@ def save_pdf():
         pdf_file = draft.name[:-4] + ".pdf"
         print("PDF Name : %s" % pdf_file)
         print("%s" % userprofile())
-        root_download = (
-            userprofile() + "\\Downloads" + "\\solidedgePDFs\\"
-        )
+        root_download = userprofile() + "\\Downloads" + "\\solidedgePDFs\\"
         if not is_exist(root_download):
             makedirs(root_download)
         new_name = combine(root_download, pdf_file)
@@ -46,16 +69,17 @@ def save_pdf():
         # Save the pdf in Downloads/solidedgePDFs.
         draft.SaveAs(NewName=new_name, FileFormat=False)
         print("%s saved in %s" % (pdf_file, root_download))
-        # Open the pdf.
-        start(new_name)
+        start(new_name) # Open the pdf.
+
 
 def prompt_exit():
     raw_input("\nPress any key to exit...")
     sys.exit()
 
+
 def confirmation(func):
     response = raw_input(
-        """Save PDF in your Downloads folder, (Press y/[Y] to proceed.):\n> """
+        """Save PDF in your Downloads folder, (Press y/[Y] to proceed.):"""
     )
     if response.lower() in ["y"]:
         func()
@@ -64,6 +88,7 @@ def confirmation(func):
         func()
     else:
         sys.exit()
+
 
 if __name__ == "__main__":
     confirmation(save_pdf)

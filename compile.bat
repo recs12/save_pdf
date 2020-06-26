@@ -6,4 +6,4 @@ ipyc.exe /main:./save_pdf/__main__.py ^
 /platform:x64 ^
 /standalone ^
 /target:exe ^
-/win32icon:pdf.ico 
+/win32icon:icon.ico 
