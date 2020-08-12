@@ -50,7 +50,7 @@ def save_pdf():
         assert draft.name.lower().endswith(".dft"), (
             "This macro only works on .dft not %s" % draft.name[-4:]
         )
-        # code here.
+
         pdf_file = draft.name[:-4] + ".pdf"
         print("PDF Name : %s" % pdf_file)
         print("%s" % userprofile())
