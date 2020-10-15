@@ -19,38 +19,15 @@ def save_pdf():
     try:
         session = Api()
         print("Author: recs")
-        print("Maintainer: Rechdi Slimane ")
         print("Last update: 2020-05-06")
         session.check_valid_version("Solid Edge ST7", "Solid Edge 2019")
         user = username()
         print("\nUser: %s" % user)
-        if user.lower() in [
-            "alba",
-            "bouc11",
-            "lapc3",
-            "peld6",
-            "fouj3",
-            "cotk2",
-            "nunk",
-            "beam",
-            "boum3",
-            "morm8",
-            "benn2",
-            "recs",
-            "gils2",
-            "albp",
-            "tres2",
-        ]:
-            print("Autorized user ID")
-        else:
-            print("user with no valid permissions.")
-            sys.exit()
         draft = session.active_document()
         print("part: %s" % draft.name)
         assert draft.name.lower().endswith(".dft"), (
             "This macro only works on .dft not %s" % draft.name[-4:]
         )
-
         pdf_file = draft.name[:-4] + ".pdf"
         print("PDF Name : %s" % pdf_file)
         print("%s" % userprofile())
