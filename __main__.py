@@ -1,40 +1,43 @@
 """ Save a draft as pdf in Download folder.
 """
 
-import sys
+from api import *
+import clr
 
-from api import (
-    Api,
-    combine,
-    is_exist,
-    makedirs,
-    raw_input,
-    start,
-    username,
-    userprofile,
-)
+clr.AddReference("System")
+clr.AddReference("System.IO")
+clr.AddReference("Interop.SolidEdge")
+clr.AddReference("System.Runtime.InteropServices")
+
+import System.Runtime.InteropServices as SRI
+import System
+
+__project__ = "save_pdf"
+__author__ = "recs"
+__version__ = "0.0.2"
+__update__ = "2020-11-06"
 
 
-def save_pdf():
+def main():
+    """Generate PDF document in batch."""
     try:
-        session = Api()
-        print("Author: recs")
-        print("Last update: 2020-05-06")
-        session.check_valid_version("Solid Edge ST7", "Solid Edge 2019")
-        user = username()
-        print("\nUser: %s" % user)
-        draft = session.active_document()
-        print("part: %s" % draft.name)
-        assert draft.name.lower().endswith(".dft"), (
-            "This macro only works on .dft not %s" % draft.name[-4:]
+        application = SRI.Marshal.GetActiveObject("SolidEdge.Application")
+        response = raw_input(
+            """Would you like to print PDF of your opened documents? (Press y/[Y] to proceed.):\n(Option: Press '*' for processing documents in batch)"""
         )
-        pdf_file = draft.name[:-4] + ".pdf"
-        print("PDF Name : %s" % pdf_file)
-        print("%s" % userprofile())
-        root_download = userprofile() + "\\Downloads" + "\\solidedgePDFs\\"
-        if not is_exist(root_download):
-            makedirs(root_download)
-        new_name = combine(root_download, pdf_file)
+
+        if response.lower() in ["y", "yes"]:
+            doc = application.ActiveDocument
+            save_as_pdf(doc, True)
+
+        elif response.lower() in ["*"]:
+            # loop through all the drafts
+            documents = application.Documents
+            for doc in documents:
+                save_as_pdf(doc, False)
+
+        else:
+            pass
 
     except AssertionError as err:
         print(err.args)
@@ -42,30 +45,13 @@ def save_pdf():
     except Exception as ex:
         print(ex.args)
 
-    else:
-        # Save the pdf in Downloads/solidedgePDFs.
-        draft.SaveAs(NewName=new_name, FileFormat=False)
-        print("%s saved in %s" % (pdf_file, root_download))
-        start(new_name) # Open the pdf.
-
-
-def prompt_exit():
-    raw_input("\nPress any key to exit...")
-    sys.exit()
-
-
-def confirmation(func):
-    response = raw_input(
-        """Save PDF in your Downloads folder, (Press y/[Y] to proceed.):"""
-    )
-    if response.lower() in ["y"]:
-        func()
+    finally:
         prompt_exit()
-    elif response in ["*"]:
-        func()
-    else:
-        sys.exit()
 
 
 if __name__ == "__main__":
-    confirmation(save_pdf)
+    print(
+        "%s\n--author:%s --version:%s --last-update :%s\n"
+        % (__project__, __author__, __version__, __update__)
+    )
+    main()

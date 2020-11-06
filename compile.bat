@@ -1,8 +1,8 @@
-ipyc.exe /main:.__main__.py ^
+ipyc.exe /main:__main__.py ^
 api.py ^
 Interop.SolidEdge.dll ^
 /embed ^
-/out:save_pdf_recs_64x_0-0-0 ^
+/out:save_pdf ^
 /platform:x64 ^
 /standalone ^
 /target:exe ^

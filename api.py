@@ -1,10 +1,10 @@
 """
 Api solidedge
 =======================
-
 """
 
 import clr
+import sys
 
 clr.AddReference("System")
 clr.AddReference("System.IO")
@@ -18,43 +18,58 @@ from System.Diagnostics.Process import Start
 from System.IO.Path import Combine
 from System.IO import Directory
 
-def  raw_input(message):
+
+
+def raw_input(message):
     Console.WriteLine(message)
     return Console.ReadLine()
+
 
 def is_exist(path_to_check):
     return Directory.Exists(path_to_check)
 
+
 def makedirs(path_to_make):
     Directory.CreateDirectory(path_to_make)
+
 
 def userprofile():
     return System.Environment.GetEnvironmentVariable("USERPROFILE")
 
+
 def username():
     return System.Environment.UserName
+
 
 def combine(path1, path2):
     return Combine(path1, path2)
 
-def start(path_pdf):
-    Start(path_pdf)
 
-class Api:
-    def __init__(self):
-        # Connect to a running instance of Solid Edge
-        self.api = SRI.Marshal.GetActiveObject("SolidEdge.Application")
+def prompt_exit():
+    raw_input("\nPress any key to exit...")
+    sys.exit()
 
-    def check_valid_version(self, *valid_version):
-        # validate solidedge version - 'Solid Edge ST7'
-        print("version solidedge: %s" % self.api.Value)
-        assert self.api.Value in valid_version, "Unvalid version of solidedge"
 
-    def active_document(self):
-        return self.api.ActiveDocument
+def save_as_pdf(draft, open):
+    """Print draft as pdf in a local folder in the Dowloads folder.
+    """
+    print("---")
 
-    def open_document(self, path_to_item):
-        return self.document.Open(path_to_item)
+    print("Drawing: %s" % draft.name)
+    assert draft.name.lower().endswith(".dft"), (
+        "This macro only works on Drawing document not %s" % draft.name[-4:]
+    )
+    pdf_file = draft.name[:-4] + ".pdf"
 
-    def close_document(self):
-        return self.document.Close()
+    print("PDF    : %s" % pdf_file)
+    root_download = userprofile() + "\\Downloads" + "\\solidedgePDFs\\"
+    if not is_exist(root_download):
+        makedirs(root_download)
+
+    # Save the pdf in Downloads/solidedgePDFs.
+    new_name = combine(root_download, pdf_file)
+    draft.SaveAs(NewName=new_name, FileFormat=False)
+    if open:
+        Start(new_name)  # Open the pdf.
+    print("saved in %s" % root_download)
+    print("...")
